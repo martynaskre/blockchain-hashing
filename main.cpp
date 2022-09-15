@@ -2,7 +2,10 @@
 #include "Hash.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Hash hash;
+
+    std::cout << hash.setString("sw").make() << std::endl;
+    std::cout << hash.setString("dw").make() << std::endl;
 
     return 0;
 }

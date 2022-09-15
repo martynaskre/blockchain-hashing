@@ -11,6 +11,16 @@
 class Hash {
 private:
     std::string string;
+
+public:
+    Hash();
+    explicit Hash(std::string str);
+    explicit Hash(char *str);
+
+    Hash& setString(std::string str);
+    Hash& setString(char *str);
+
+    std::string make();
 };
 
 
