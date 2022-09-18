@@ -12,6 +12,8 @@ class Hash {
 private:
     std::string string;
 
+    unsigned int rotateRight(int toRotate, int rotateBy);
+
 public:
     Hash();
     explicit Hash(std::string str);

@@ -8,6 +8,7 @@
 #include <sstream>
 
 const int LENGTH = 64;
+const std::string ABC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&";
 
 Hash::Hash() = default;
 
@@ -30,11 +31,34 @@ Hash &Hash::setString(char *str) {
 std::string Hash::make() {
     std::stringstream output;
 
-    for (int i = 0; i < LENGTH; i++) {
-        char character = i ^ string[0];
+    int characterSum = 0;
 
-        output << std::hex << character;
+    for (char character: string) {
+        characterSum += character ^ rotateRight(character, character);
+    }
+
+    std::stringstream characterSumArray;
+    characterSumArray << characterSum;
+
+    for (int i = 0; i < LENGTH; i++) {
+        int charIndex;
+
+        if (characterSumArray.str().length() > i) {
+            charIndex = characterSumArray.str()[i] * i;
+        } else {
+            charIndex = characterSumArray.str()[i % characterSumArray.str().length()] * i;
+        }
+
+        if (charIndex >= ABC.length()) {
+            charIndex = charIndex % ABC.length();
+        }
+
+        output << ABC[charIndex];
     }
 
     return output.str();
+}
+
+unsigned int Hash::rotateRight(int toRotate, int rotateBy) {
+    return (toRotate >> rotateBy) | (toRotate << (32 - rotateBy));
 }
