@@ -7,6 +7,7 @@
 #include "Hash.h"
 #include "StringGenerator.h"
 #include "Benchmark.h"
+#include "StringComparator.h"
 
 void Application::run(int argc, char *argv[]) {
     std::vector<std::string> args(argv + 1, argv + argc);
@@ -47,6 +48,12 @@ void Application::run(int argc, char *argv[]) {
 
     if (args[0] == "--c") {
         this->performCollisionTest();
+
+        return;
+    }
+
+    if (args[0] == "--a") {
+        this->performAvalancheTest();
 
         return;
     }
@@ -167,5 +174,61 @@ void Application::performCollisionTest() {
         }
     }
 
-    std::cout << "Total collisions count was " << collisions << std::endl;
+    std::cout << "Total collision count was " << collisions << std::endl;
+}
+
+void Application::performAvalancheTest() {
+    StringGenerator generator;
+    class Hash hash;
+
+    double hexAverage, hexMin = 100, hexMax = 0;
+    double bitAverage;
+    unsigned int bitMin = 0, bitMax = 0;
+
+    for (int i = 1; i <= 100000; i++) {
+        std::string firstString = generator.setLength(1000).generate();
+        std::string secondString = generator.setLength(1000).generate();
+
+        firstString[i % 1000] = generator.setLength(1).generate()[0];
+        secondString[i % 1000] = generator.setLength(1).generate()[0];
+
+        std::string firstHash = hash.setString(firstString).make();
+        std::string secondHash = hash.setString(secondString).make();
+
+        double hexDifference = StringComparator::calculateDifference(firstHash, secondHash);
+        double bitDifference = StringComparator::bitDifference(firstHash, secondHash);
+
+        if (hexDifference < hexMin) {
+            hexMin = hexDifference;
+        }
+
+        if (hexDifference > hexMax) {
+            hexMax = hexDifference;
+        }
+
+        hexAverage += hexDifference;
+
+        if (bitDifference < bitMin || i == 1) {
+            bitMin = bitDifference;
+        }
+
+        if (bitDifference > bitMax) {
+            bitMax = bitDifference;
+        }
+
+        bitAverage += bitDifference;
+    }
+
+    hexAverage = hexAverage / 100000;
+    bitAverage = bitAverage / 100000;
+
+    std::cout << std::setprecision(2) << "Minimum HEX difference was: " << hexMin << "%" << std::endl;
+    std::cout << std::setprecision(2) << "Maximum HEX difference was: " << hexMax << "%" << std::endl;
+    std::cout << std::setprecision(2) << "Average HEX difference was: " << hexAverage << "%" << std::endl;
+
+    std::cout << std::endl;
+
+    std::cout << std::fixed << "Minimum bit difference was: " << bitMin << "" << std::endl;
+    std::cout << std::fixed << "Maximum bit difference was: " << bitMax << "" << std::endl;
+    std::cout << std::fixed << "Average bit difference was: " << bitAverage << "" << std::endl;
 }

@@ -26,6 +26,7 @@ private:
     void generateFiles();
     void performBenchmark();
     void performCollisionTest();
+    void performAvalancheTest();
 };
 
 
