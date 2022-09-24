@@ -25,6 +25,7 @@ private:
     void determineProgramMode(int argc, char *argv[]);
     void generateFiles();
     void performBenchmark();
+    void performCollisionTest();
 };
 
 

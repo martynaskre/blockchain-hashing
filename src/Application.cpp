@@ -45,6 +45,12 @@ void Application::run(int argc, char *argv[]) {
         return;
     }
 
+    if (args[0] == "--c") {
+        this->performCollisionTest();
+
+        return;
+    }
+
     std::cout << "No operation was selected." << std::endl;
 }
 
@@ -139,4 +145,27 @@ void Application::performBenchmark() {
 
     std::cout << std::endl << std::setprecision(10) << "Total hashing time for one symbol was"
     << totalTime / totalSymbols << "s" << std::endl;
+}
+
+void Application::performCollisionTest() {
+    StringGenerator generator;
+    class Hash hash;
+    std::vector<std::pair<int, int>> lengths = { {10, 25000}, {100, 25000}, {500, 25000}, {1000, 25000} };
+    int collisions = 0;
+
+    for (auto length: lengths) {
+        int symbols = length.first;
+        int maxIterations = length.second;
+
+        for (int i = 1; i <= maxIterations; i++) {
+            std::string firstHash = hash.setString(generator.setLength(symbols).generate()).make();
+            std::string secondHash = hash.setString(generator.setLength(symbols).generate()).make();
+
+            if (firstHash == secondHash) {
+                collisions++;
+            }
+        }
+    }
+
+    std::cout << "Total collisions count was " << collisions << std::endl;
 }
