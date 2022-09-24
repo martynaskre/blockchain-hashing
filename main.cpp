@@ -1,12 +1,9 @@
-#include <iostream>
-#include "Hash.h"
+#include "Application.h"
 
-int main() {
-    Hash hash;
+int main(int argc, char *argv[]) {
+    Application application;
 
-    std::cout << hash.setString("sw").make() << std::endl;
-    std::cout << hash.setString("swx").make() << std::endl;
-    std::cout << hash.setString("dw").make() << std::endl;
+    application.run(argc, argv);
 
     return 0;
 }
