@@ -8,25 +8,25 @@
 
 #include <string>
 #include <fstream>
-
-enum ApplicationMode {
-    Hash,
-    GenerateFile,
-};
+#include "Hash.h"
+#include "StringGenerator.h"
 
 class Application {
-    ApplicationMode mode;
     std::ifstream reader;
     std::ofstream writer;
+    class Hash hash;
+    StringGenerator generator;
     static const std::vector<std::pair<std::string, std::string>> commands;
 
 public:
     void run(int argc, char *argv[]);
+
 private:
-    std::string makeHash();
     void printHelp();
+    void hashInput(const std::string &input);
+    void hashFile(const std::string &filename);
     void generateFiles();
-    void performBenchmark();
+    void performBenchmark(const std::string &filename);
     void performCollisionTest();
     void performAvalancheTest();
 };
