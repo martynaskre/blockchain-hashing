@@ -34,7 +34,14 @@ std::string Hash::make() {
     int characterSum = 0;
 
     for (char character: string) {
-        characterSum += character ^ rotateRight(character, character);
+        int value = character ^ rotateRight(character, character);
+
+        value = value ^ rotateRight(value, value);
+        value = value ^ rotateRight(value, value);
+
+        value = rotateLeft(value, value);
+
+        characterSum += value;
     }
 
     std::stringstream characterSumArray;
@@ -61,4 +68,8 @@ std::string Hash::make() {
 
 unsigned int Hash::rotateRight(int toRotate, int rotateBy) {
     return (toRotate >> rotateBy) | (toRotate << (32 - rotateBy));
+}
+
+unsigned int Hash::rotateLeft(int toRotate, int rotateBy) {
+    return (toRotate << rotateBy) | (toRotate >> (32 - rotateBy));
 }

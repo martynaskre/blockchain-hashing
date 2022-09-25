@@ -1,5 +1,25 @@
 # VU Blockchain hashing algorithm
 
+A custom hashing algorithm implementation for Vilnius University "Blockchain technologies" course.
+
+## Usage
+
+```bash
+$ ./Blochckain --i Lietuva
+```
+
+## Available commands
+
+| Command          | Description                                                                                                                                |
+|------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| --help           | Shows available commands                                                                                                                   |
+| --i {string}     | Hashes provided string                                                                                                                     |
+| --if {file_path} | Hashes provided file contents                                                                                                              |
+| --g              | Generates test files                                                                                                                       |
+| --b {file_path?} | Runs hashing benchmark for constitution.txt file. If path is not provided, then it will look for a file with path "files/constitution.txt" |
+| --c              | Runs collision test                                                                                                                        |
+| --a              | Runs avalanche test                                                                                                                        |
+
 ## Idea
 
 General idea for this hashing algorithm revolves around using `XOR` and `bit rotations`.
@@ -14,7 +34,12 @@ Function makeHash(string str)
     For i = 0 To Len(str)
         character <- str[i]
         
-        characterSum += character Xor rotateRight(character, character)
+        value <- character Xor rotateRight(character, character)
+        
+        value <- value Xor rotateRight(value, value)
+        value <- value Xor rotateRight(value, value)
+        
+        value <- rotateLeft(value, value)
     Endfor
     
     characterSumArray <- INT_TO_STRING(characterSum)
@@ -28,3 +53,15 @@ Function makeHash(string str)
     Return output
 Endfunction        
 ```
+
+## Strengths and weaknesses
+
+The strengths:
+- hashes are generated very quickly
+- generated hashes are collision resistant (around 1 collision per 100k unique strings)
+- on average two hashes differ<sup>1</sup> from each other by ~83%
+
+The weaknesses:
+- on some rare instances two hashes vary<sup>1</sup> by only ~23%
+
+<sup>1</sup> - difference is measured using Levenshtein distance algorithm, e.g. two strings "aa" and "ab" differ by 50% because one operation is required to make them equal.

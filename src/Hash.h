@@ -13,6 +13,7 @@ private:
     std::string string;
 
     unsigned int rotateRight(int toRotate, int rotateBy);
+    unsigned int rotateLeft(int toRotate, int rotateBy);
 
 public:
     Hash();

@@ -10,14 +10,12 @@
 #include <map>
 #include <string>
 
+
 struct BenchmarkResult {
     std::chrono::steady_clock::time_point start;
     std::string title;
 };
 
-/**
- * Benchmark class is responsible for running and storing benchmark results.
- */
 class Benchmark {
     static std::map<std::string, BenchmarkResult> benchmarks;
 
@@ -25,7 +23,6 @@ public:
     static void start(const std::string& benchmark);
     static float end(const std::string& benchmark);
 };
-
 
 
 #endif //BLOCKCHAIN_BENCHMARK_H
