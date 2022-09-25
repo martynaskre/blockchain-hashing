@@ -5,7 +5,7 @@ A custom hashing algorithm implementation for Vilnius University "Blockchain tec
 ## Usage
 
 ```bash
-$ ./Blochckain --i Lietuva
+$ ./Blockchain --i Lietuva
 ```
 
 ## Available commands
@@ -54,14 +54,19 @@ Function makeHash(string str)
 Endfunction        
 ```
 
+## Performance
+
+![Performance chart](performance.png "Performance chart")
+
 ## Strengths and weaknesses
 
 The strengths:
-- hashes are generated very quickly
+- hashes are generated very quickly (when given string with length <= 1000)
 - generated hashes are collision resistant (around 1 collision per 100k unique strings)
 - on average two hashes differ<sup>1</sup> from each other by ~83%
 
 The weaknesses:
+- algorithm performance suffers when given a large string
 - on some rare instances two hashes vary<sup>1</sup> by only ~23%
 
 <sup>1</sup> - difference is measured using Levenshtein distance algorithm, e.g. two strings "aa" and "ab" differ by 50% because one operation is required to make them equal.

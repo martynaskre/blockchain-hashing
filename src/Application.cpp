@@ -153,7 +153,7 @@ void Application::generateFiles() {
 
 void Application::performBenchmark(const std::string &filename) {
     std::cout << Color::YELLOW << "Starting performance benchmark..." << Color::RESET << std::endl << std::endl;
-    
+
     this->reader.open(filename);
 
     if (this->reader.fail()) {
@@ -209,9 +209,6 @@ void Application::performBenchmark(const std::string &filename) {
     }
 
     this->reader.close();
-
-    std::cout << std::endl << std::setprecision(10) << "Total hashing time for one symbol was "
-    << Color::MAGENTA << totalTime / totalSymbols << "s" << Color::RESET << std::endl;
 }
 
 void Application::performCollisionTest() {
