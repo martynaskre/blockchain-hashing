@@ -18,11 +18,13 @@ class Application {
     ApplicationMode mode;
     std::ifstream reader;
     std::ofstream writer;
+    static const std::vector<std::pair<std::string, std::string>> commands;
 
 public:
     void run(int argc, char *argv[]);
 private:
-    void determineProgramMode(int argc, char *argv[]);
+    std::string makeHash();
+    void printHelp();
     void generateFiles();
     void performBenchmark();
     void performCollisionTest();

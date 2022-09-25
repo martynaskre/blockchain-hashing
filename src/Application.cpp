@@ -8,19 +8,47 @@
 #include "StringGenerator.h"
 #include "Benchmark.h"
 #include "StringComparator.h"
+#include "Tester.h"
+#include "Color.h"
+
+const std::vector<std::pair<std::string, std::string>> Application::commands = {
+        {"--help", "Shows available commands"},
+        {"--i {string}", "Hashes provided string"},
+        {"--if {file_path}", "Hashes provided file contents"},
+        {"--g", "Generates test files"},
+        {"--b", "Runs benchmarks with generated files"},
+        {"--c", "Runs collision test"},
+        {"--a", "Runs avalanche test"}
+};
 
 void Application::run(int argc, char *argv[]) {
-    std::vector<std::string> args(argv + 1, argv + argc);
+    if (argc <= 1) {
+        std::cout << Color::RED << "No arguments were specified." << Color::RESET << std::endl << std::endl;
 
-    if (args[0] == "--i") {
-        class Hash hash;
-
-        std::cout << hash.setString(args[1]).make() << std::endl;
+        this->printHelp();
 
         return;
     }
 
-    if (args[0] == "--if") {
+    std::vector<std::string> args(argv + 1, argv + argc);
+
+    if ((args[0] == "--help" || args[0] == "--h" || args[0] == "-h" || args[0] == "--help") && argc == 2) {
+        this->printHelp();
+
+        return;
+    }
+
+    if (args[0] == "--i" && (argc >= 2 && argc <= 3)) {
+        class Hash hash;
+
+        std::string toHash = (argc == 2) ? "" : args[1];
+
+        std::cout << hash.setString(toHash).make() << std::endl;
+
+        return;
+    }
+
+    if (args[0] == "--if" && argc == 3) {
         class Hash hash;
         std::string toHash;
 
@@ -34,31 +62,44 @@ void Application::run(int argc, char *argv[]) {
         return;
     }
 
-    if (args[0] == "--g") {
+    if (args[0] == "--g" && argc == 2) {
         this->generateFiles();
 
         return;
     }
 
-    if (args[0] == "--b") {
+    if (args[0] == "--b" && argc == 2) {
         this->performBenchmark();
 
         return;
     }
 
-    if (args[0] == "--c") {
+    if (args[0] == "--c" && argc == 2) {
+//        Tester tester;
+//        tester.runTests(100000, 1000, "out.txt");
         this->performCollisionTest();
 
         return;
     }
 
-    if (args[0] == "--a") {
+    if (args[0] == "--a" && argc == 2) {
         this->performAvalancheTest();
 
         return;
     }
 
-    std::cout << "No operation was selected." << std::endl;
+    std::cout << Color::RED << "Invalid arguments were specified." << Color::RESET << std::endl << std::endl;
+    this->printHelp();
+}
+
+void Application::printHelp() {
+    std::cout << Color::YELLOW << "Available commands:" << Color::RESET << std::endl;
+
+    for (const auto& command: commands) {
+        std::cout << std::setfill(' ') << std::setw(4) << "";
+        std::cout << std::setw(30) << std::left << Color::GREEN + command.first + Color::RESET;
+        std::cout << command.second << std::endl;
+    }
 }
 
 void Application::generateFiles() {
@@ -169,6 +210,8 @@ void Application::performCollisionTest() {
             std::string secondHash = hash.setString(generator.setLength(symbols).generate()).make();
 
             if (firstHash == secondHash) {
+                std::cout <<firstHash << std::endl;
+                std::cout << secondHash << std::endl;
                 collisions++;
             }
         }
